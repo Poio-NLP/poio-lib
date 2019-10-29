@@ -6,7 +6,7 @@ A NLP library of common functionality within the Poio project.
 
 Local install:
 
-    $ pip install ../poio-lib
+    $ pip install path/to/poio-lib
 
 Install from PyPI:
 
@@ -22,5 +22,5 @@ iso_639_1 = langinfo.iso_639_1_for_3("deu")
 
 ## Running the tests
 
-    $ python3 -m unittest discover
+    $ python -m unittest discover
  

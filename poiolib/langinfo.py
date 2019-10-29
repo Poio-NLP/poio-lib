@@ -63,3 +63,19 @@ class LangInfo:
             if values["iso_639_1"] != ""
         }
         return iso_639_1_map.get(iso_639_1, "")
+
+    def langname_for_iso(self, iso_639_3):
+        """
+        Return language name for a given ISO 639-3 code.
+
+        Parameters
+        ----------
+        iso_639_3 : str
+            The ISO 639-3 code to look up
+
+        Returns
+        -------
+        str
+            The language name for the given code.
+        """
+        return self.iso_info_map[iso_639_3]["language_name"]
