@@ -1,11 +1,11 @@
 import unittest
 
-import poiolib.langinfo
+import poiolib
 
 
 class TestLangInfo(unittest.TestCase):
     def setUp(self):
-        self.langinfo = poiolib.langinfo.LangInfo()
+        self.langinfo = poiolib.LangInfo()
 
     def test_iso_639_1_for_3(self):
         self.assertEqual(self.langinfo.iso_639_1_for_3("bar"), "")

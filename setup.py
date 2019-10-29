@@ -8,6 +8,7 @@ import io
 import os
 import sys
 from shutil import rmtree
+import glob
 
 from setuptools import find_packages, setup, Command
 
@@ -103,14 +104,15 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
+    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     # If your package is a single module, use this instead of "packages":
-    py_modules=["poiolib"],
+    # py_modules=["poiolib"],
     # entry_points={
     #     "console_scripts": ["mycli=mymodule:cli"],
     # },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
+    package_data={"poiolib": ["data/*"]},
     include_package_data=True,
     license="Apache License, Version 2.0",
     classifiers=[

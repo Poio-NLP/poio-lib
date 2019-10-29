@@ -14,7 +14,7 @@ class LangInfo:
         self.init_iso_map()
 
     def init_iso_map(self):
-        iso_info_file = os.path.join(SCRIPT_DIR, "..", "data", "iso-639-3.tab")
+        iso_info_file = os.path.join(SCRIPT_DIR, "data", "iso-639-3.tab")
         self.iso_info_map = {}
         with open(iso_info_file, "r", encoding="utf-8") as f:
             iso_info_rows = csv.reader(f, delimiter="\t")

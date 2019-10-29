@@ -1,0 +1,1 @@
+from .langinfo import LangInfo
