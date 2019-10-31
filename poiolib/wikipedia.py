@@ -3,6 +3,10 @@ import sys
 import subprocess
 import urllib
 import re
+import glob
+import shutil
+import json
+import tempfile
 
 import requests
 from bs4 import BeautifulSoup
@@ -10,6 +14,32 @@ from bs4 import BeautifulSoup
 from .langinfo import LangInfo
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def extract_to_txt(iso_639_3: str, output_filename: str):
+    """
+    Download and extract a Wikipedia to the given text file.
+
+    Parameters
+    ----------
+    iso_639_3 : str
+    	The ISO code of the Wikiepedia to download
+    output_filename : str
+    	The path to the text file to output the Wikipedia data. We will write
+        one article per line.
+    """
+    tmp_dir = os.path.join(tempfile.gettempdir(), "poio-corpus-data", iso_639_3)
+    extract_to(iso_639_3, tmp_dir)
+    with open(output_filename, "w", encoding="utf-8") as output:
+        for wiki_file in glob.glob(os.path.join(tmp_dir, "**", "wiki_*")):
+            with open(wiki_file, "r", encoding="utf-8") as f:
+                for line in f.readlines():
+                    article_data = json.loads(line)
+                    article_text = article_data["text"]
+                    article_text = re.sub("\n+", " ", article_text)
+                    output.write(article_text)
+                    output.write("\n")
+    shutil.rmtree(tmp_dir)
 
 
 def extract_to(iso_639_3: str, output_path: str):

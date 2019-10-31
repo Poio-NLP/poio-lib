@@ -10,10 +10,17 @@ import poiolib.wikipedia
 class TestWikipedia(unittest.TestCase):
     def setUp(self):
         self.tmp_dir = os.path.join(tempfile.gettempdir(), "poio-test-data")
+        os.makedirs(self.tmp_dir)
 
     def tearDown(self):
         if os.path.exists(self.tmp_dir):
             shutil.rmtree(self.tmp_dir)
+
+    def test_extract_to_text(self):
+        output_file = os.path.join(self.tmp_dir, "cre.txt")
+        poiolib.wikipedia.extract_to_txt("cre", output_file)
+        self.assertTrue(os.path.isfile(output_file))
+        self.assertNotEqual(os.path.getsize(output_file), 0)
 
     def test_extract_to(self):
         poiolib.wikipedia.extract_to("cre", self.tmp_dir)
