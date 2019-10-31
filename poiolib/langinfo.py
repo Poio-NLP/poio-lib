@@ -1,5 +1,6 @@
 import os
 import csv
+import json
 
 from typing import List
 
@@ -16,16 +17,9 @@ class LangInfo:
         self.init_iso_map()
 
     def init_iso_map(self):
-        iso_info_file = os.path.join(SCRIPT_DIR, "data", "iso-639-3.tab")
-        self.iso_info_map = {}
-        with open(iso_info_file, "r", encoding="utf-8") as f:
-            iso_info_rows = csv.reader(f, delimiter="\t")
-            next(iso_info_rows)
-            for row in iso_info_rows:
-                self.iso_info_map[row[0]] = {
-                    "iso_639_1": row[3],
-                    "language_name": row[6],
-                }
+        langinfo_file = os.path.join(SCRIPT_DIR, "data", "langinfo.json")
+        with open(langinfo_file, "r", encoding="utf-8") as f:
+            self.iso_info_map = json.load(f)
 
     def languages(self) -> List[str]:
         """
@@ -77,7 +71,7 @@ class LangInfo:
         }
         return iso_639_1_map.get(iso_639_1, "")
 
-    def langname_for_iso(self, iso_639_3):
+    def langname_for_iso(self, iso_639_3: str):
         """
         Return language name for a given ISO 639-3 code.
 
@@ -92,3 +86,21 @@ class LangInfo:
             The language name for the given code.
         """
         return self.iso_info_map[iso_639_3]["language_name"]
+
+    def geoinfo_for_iso(self, iso_639_3: str):
+        """
+        Return geo information for a given ISO 639-3 code.
+
+        Parameters
+        ----------
+        iso_639_3 : str
+            The ISO 639-3 code to look up.
+
+        Returns
+        -------
+        dict
+            The geo information for the given code. The result dict has two
+            keys, `long` and `lat`. Returns `None` if the language does not
+            have geo information.
+        """
+        return self.iso_info_map[iso_639_3].get("geo", None)

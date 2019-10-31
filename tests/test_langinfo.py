@@ -27,6 +27,13 @@ class TestLangInfo(unittest.TestCase):
         self.assertEqual(self.langinfo.langname_for_iso("deu"), "German")
         self.assertEqual(self.langinfo.langname_for_iso("bar"), "Bavarian")
 
+    def test_geoinfo_for_iso(self):
+        langinfo = self.langinfo.geoinfo_for_iso("bar")
+        self.assertIsNotNone(langinfo)
+        self.assertIsInstance(langinfo["lat"], str)
+        self.assertIsInstance(langinfo["long"], str)
+        self.assertIsNone(self.langinfo.geoinfo_for_iso("zza"))
+
 
 if __name__ == "__main__":
     unittest.main()
