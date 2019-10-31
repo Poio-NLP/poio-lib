@@ -1,6 +1,8 @@
 import os
 import csv
 
+from typing import List
+
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -24,6 +26,17 @@ class LangInfo:
                     "iso_639_1": row[3],
                     "language_name": row[6],
                 }
+
+    def languages(self) -> List[str]:
+        """
+        Get a list of supported languages, as ISO 639-3 codes.
+
+        Returns
+        -------
+        array of str
+            An array of ISO 639-3 codes.
+        """
+        return self.iso_info_map.keys()
 
     def iso_639_1_for_3(self, iso_639_3: str) -> str:
         """

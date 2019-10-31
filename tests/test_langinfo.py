@@ -1,4 +1,5 @@
 import unittest
+from collections.abc import Iterable
 
 import poiolib
 
@@ -6,6 +7,11 @@ import poiolib
 class TestLangInfo(unittest.TestCase):
     def setUp(self):
         self.langinfo = poiolib.LangInfo()
+
+    def test_languages(self):
+        languages = self.langinfo.languages()
+        self.assertIsInstance(languages, Iterable)
+        self.assertNotEqual(len(languages), 0)
 
     def test_iso_639_1_for_3(self):
         self.assertEqual(self.langinfo.iso_639_1_for_3("bar"), "")

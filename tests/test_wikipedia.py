@@ -16,7 +16,7 @@ class TestWikipedia(unittest.TestCase):
         if os.path.exists(self.tmp_dir):
             shutil.rmtree(self.tmp_dir)
 
-    def test_extract_to_text(self):
+    def test_extract_to_txt(self):
         output_file = os.path.join(self.tmp_dir, "cre.txt")
         poiolib.wikipedia.extract_to_txt("cre", output_file)
         self.assertTrue(os.path.isfile(output_file))
