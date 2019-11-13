@@ -31,8 +31,7 @@ def extract_to_txt(iso_639_3: str, output_filename: str):
     tmp_dir = os.path.join(tempfile.gettempdir(), "poio-corpus-data", iso_639_3)
     extract_to(iso_639_3, tmp_dir)
     re_emptyspace = re.compile(r"[\t\n]+")
-    re_wordbeg = re.compile(r"(?<=\s)[-']")
-    re_wordend = re.compile(r"[-'](?=\s)")
+    re_xmltag = re.compile(r"</?[A-Za-z]*>")
     with open(output_filename, "w", encoding="utf-8") as output:
         for wiki_file in glob.glob(os.path.join(tmp_dir, "**", "wiki_*")):
             with open(wiki_file, "r", encoding="utf-8") as f:
@@ -40,8 +39,7 @@ def extract_to_txt(iso_639_3: str, output_filename: str):
                     article_data = json.loads(line)
                     article_text = article_data["text"]
                     article_text = re_emptyspace.sub(" ", article_text)
-                    article_text = re_wordbeg.sub("", article_text)
-                    article_text = re_wordend.sub("", article_text)
+                    article_text = re_xmltag.sub(" ", article_text)
                     if len(article_text) > 200:
                         output.write(article_text)
                         output.write("\n")

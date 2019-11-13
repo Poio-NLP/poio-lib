@@ -1,2 +1,5 @@
 beautifulsoup4
 requests
+pressagio
+regex
+syntok
