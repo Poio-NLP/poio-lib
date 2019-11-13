@@ -10,7 +10,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 class TestCorpusReader(unittest.TestCase):
     def setUp(self):
         self.corpus_reader = poiolib.corpus.CorpusReader(
-            os.path.join(SCRIPT_DIR, "test_data")
+            [os.path.join(SCRIPT_DIR, "test_data", "der_linksdenker.txt")]
         )
 
     def test_documents(self):

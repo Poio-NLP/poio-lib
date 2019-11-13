@@ -1,5 +1,6 @@
 import re
 import collections
+import typing
 
 import pressagio.tokenizer
 
@@ -32,15 +33,15 @@ def preprocess(text: str) -> str:
 
 
 def corpus_ngrams(
-    corpus_path: str, ngram_size: int, lowercase: bool = False, cutoff: int = 0
+    files: typing.List[str], ngram_size: int, lowercase: bool = False, cutoff: int = 0
 ) -> pressagio.tokenizer.NgramMap:
     """
     Tokenize a file and return an ngram store.
 
     Parameters
     ----------
-    corpus_path : str
-       The path to the Poio corpus 
+    files : list of str
+       A list of paths to files to parse.
     ngram_size : int
         The size of the ngrams to generate.
     lowercase : bool
@@ -54,7 +55,7 @@ def corpus_ngrams(
     NgramMap
         The ngram map that allows you to iterate over the ngrams.
     """
-    corpus_reader = CorpusReader(corpus_path)
+    corpus_reader = CorpusReader(files)
     ngram_map = pressagio.tokenizer.NgramMap()
     for document in corpus_reader.documents():
         document = preprocess(document)

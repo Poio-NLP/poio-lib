@@ -11,22 +11,20 @@ StringGenerator = typing.Generator[str, None, None]
 
 class CorpusReader:
     """
-    A Poio corpus consists of one or more text files within a directory. Each
-    text files contains documents, one document per line.
+    A Poio corpus consists of one or more text files. Each text files contains
+    documents, one document per line.
     """
 
-    def __init__(self, corpus_path: str):
+    def __init__(self, files: typing.List[str]):
         """
         Intialize the corpus reader.
         
         Parameters
         ----------
-        corpus_path : str
-            The path to the corpus files. In Poio, the corpus is just a list of
-            text files in one directory.
-
+        files : list of str
+            The paths to the corpus files.
         """
-        self.corpus_path = corpus_path
+        self.files = files
 
     def documents(self) -> StringGenerator:
         """
@@ -35,7 +33,7 @@ class CorpusReader:
         Generator of str
             The document, one after the other.
         """
-        for fn in glob.glob(os.path.join(self.corpus_path, "*.txt")):
+        for fn in self.files:
             with open(fn, "r", encoding="utf-8") as f:
                 for line in f:
                     yield line
@@ -58,6 +56,14 @@ class CorpusReader:
                     yield orig_sentence
 
     def tokenized_sentences(self) -> typing.Generator[StringGenerator, None, None]:
+        """
+        Get the sentences of the corpus, with their tokens.
+
+        Returns
+        -------
+        Generator of Generator of str
+            The sentences, each is a generator of its tokens.
+        """
         for sentence in self.sentences():
             tokenizer = ForwardTokenizer(sentence)
             yield (token for token in tokenizer)

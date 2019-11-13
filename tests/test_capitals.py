@@ -8,6 +8,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestCapitals(unittest.TestCase):
     def test_sentence_starts_lower_map(self):
-        corpus_path = os.path.join(SCRIPT_DIR, "test_data")
-        lower_map = poiolib.capitals.sentence_starts_lower_map(corpus_path)
+        corpus_file = os.path.join(SCRIPT_DIR, "test_data", "der_linksdenker.txt")
+        lower_map = poiolib.capitals.sentence_starts_lower_map([corpus_file])
         self.assertEqual(lower_map["Der"], "der")

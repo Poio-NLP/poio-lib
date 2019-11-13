@@ -1,15 +1,16 @@
 import collections
+import typing
 
 import regex
 
 from .corpus import CorpusReader
 
 
-def sentence_starts_lower_map(corpus_path):
+def sentence_starts_lower_map(files: typing.List[str]) -> typing.Dict:
     """
     Create a map for tokens at sentence start that are probably lower case.
     """
-    corpus_reader = CorpusReader(corpus_path)
+    corpus_reader = CorpusReader(files)
     first_tokens = set()
     tokens_count = collections.defaultdict(int)
     re_hascapital = regex.compile(r"[[:upper:]][[:^upper:]]")
