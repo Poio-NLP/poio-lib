@@ -3,8 +3,9 @@ import collections
 import typing
 
 import pressagio.tokenizer
+import pressagio.dbconnector
 
-from .corpus import CorpusReader
+import poiolib.corpus
 
 
 def preprocess(text: str) -> str:
@@ -55,12 +56,13 @@ def corpus_ngrams(
     NgramMap
         The ngram map that allows you to iterate over the ngrams.
     """
-    corpus_reader = CorpusReader(files, document_preprocessor=preprocess)
     ngram_map = pressagio.tokenizer.NgramMap()
-    for document in corpus_reader.tokenized_documents(lowercase):
+    for document in poiolib.corpus.corpus_documents(files):
+        document = preprocess(document)
         ngram_list = []
+        tokenized_document = poiolib.corpus.tokenize(document, lowercase)
         if ngram_size > 1:
-            for token in document:
+            for token in tokenized_document:
                 token_idx = ngram_map.add_token(token)
                 ngram_list.append(token_idx)
                 if len(ngram_list) == ngram_size - 1:
@@ -68,7 +70,7 @@ def corpus_ngrams(
         if len(ngram_list) < ngram_size - 1:
             continue
 
-        for token in document:
+        for token in tokenized_document:
             token_idx = ngram_map.add_token(token)
             ngram_list.append(token_idx)
             ngram_map.add(ngram_list)
@@ -78,3 +80,30 @@ def corpus_ngrams(
         ngram_map.cutoff(cutoff)
 
     return ngram_map
+
+
+def ngrams_to_postgres(
+    ngram_map: pressagio.tokenizer.NgramMap, ngram_size: int, iso_639_3: str
+):
+    """Insert ngrams into postgres database.
+
+    This is a simple convenience wrapper around the pressagio function.
+
+    Parameters
+    ----------
+    ngrams : pressagion.tokenizer.NgramMap
+        The ngrams to insert into the database.
+    ngram_size : int
+        The size of the ngrams.
+    iso_639_3 : str
+        The ISO code of the language of the ngrams.
+    """
+    pressagio.dbconnector.insert_ngram_map_postgres(
+        ngram_map,
+        ngram_size,
+        iso_639_3,
+        append=False,
+        create_index=True,
+        lowercase=True,
+        normalize=True,
+    )
