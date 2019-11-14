@@ -6,7 +6,7 @@ import regex
 from .corpus import CorpusReader
 
 
-def sentence_starts_lower_map(files: typing.List[str]) -> typing.Dict:
+def sentence_starts_capital_map(files: typing.List[str]) -> typing.Dict:
     """
     Create a map for tokens at sentence start that are probably lower case.
     """
