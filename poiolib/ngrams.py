@@ -55,15 +55,12 @@ def corpus_ngrams(
     NgramMap
         The ngram map that allows you to iterate over the ngrams.
     """
-    corpus_reader = CorpusReader(files)
+    corpus_reader = CorpusReader(files, document_preprocessor=preprocess)
     ngram_map = pressagio.tokenizer.NgramMap()
-    for document in corpus_reader.documents():
-        document = preprocess(document)
+    for document in corpus_reader.tokenized_documents(lowercase):
         ngram_list = []
-        tokenizer = pressagio.tokenizer.ForwardTokenizer(document)
-        tokenizer.lowercase = lowercase
         if ngram_size > 1:
-            for token in tokenizer:
+            for token in document:
                 token_idx = ngram_map.add_token(token)
                 ngram_list.append(token_idx)
                 if len(ngram_list) == ngram_size - 1:
@@ -71,7 +68,7 @@ def corpus_ngrams(
         if len(ngram_list) < ngram_size - 1:
             continue
 
-        for token in tokenizer:
+        for token in document:
             token_idx = ngram_map.add_token(token)
             ngram_list.append(token_idx)
             ngram_map.add(ngram_list)

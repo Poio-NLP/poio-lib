@@ -10,10 +10,12 @@ class TestNgrams(unittest.TestCase):
     def test_corpus_ngrams(self):
         corpus_file = os.path.join(SCRIPT_DIR, "test_data", "der_linksdenker.txt")
         ngram_map = poiolib.ngrams.corpus_ngrams([corpus_file], 1)
-        (ngram, count) = next(ngram_map.items())
-        self.assertEqual(ngram, ["Der"])
-        self.assertEqual(count, 12)
+        result = {tuple(ngram): count for ngram, count in ngram_map.items()}
+        self.assertIn(("Der",), result)
+        self.assertNotIn(("-über",), result)
+        self.assertEqual(result[("Der",)], 12)
+        self.assertEqual(result[("über",)], 3)
         ngram_map = poiolib.ngrams.corpus_ngrams([corpus_file], 2)
-        (ngram, count) = next(ngram_map.items())
-        self.assertEqual(ngram, ["Der", "Linksdenker"])
-        self.assertEqual(count, 2)
+        result = {tuple(ngram): count for ngram, count in ngram_map.items()}
+        self.assertIn(("Der", "Linksdenker"), result)
+        self.assertEqual(result[("Der", "Linksdenker")], 2)

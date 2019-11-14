@@ -7,6 +7,7 @@ from pressagio.tokenizer import ForwardTokenizer
 
 
 StringGenerator = typing.Generator[str, None, None]
+TextprocessorCallable = typing.Callable[[str], str]
 
 
 class CorpusReader:
@@ -15,7 +16,11 @@ class CorpusReader:
     documents, one document per line.
     """
 
-    def __init__(self, files: typing.List[str]):
+    def __init__(
+        self,
+        files: typing.List[str],
+        document_preprocessor: TextprocessorCallable = None,
+    ):
         """
         Intialize the corpus reader.
         
@@ -25,9 +30,12 @@ class CorpusReader:
             The paths to the corpus files.
         """
         self.files = files
+        self.document_preprocessor = document_preprocessor
 
     def documents(self) -> StringGenerator:
         """
+        Get the documents of the corpus.
+
         Returns
         -------
         Generator of str
@@ -36,7 +44,30 @@ class CorpusReader:
         for fn in self.files:
             with open(fn, "r", encoding="utf-8") as f:
                 for line in f:
+                    if self.document_preprocessor:
+                        line = self.document_preprocessor(line)
                     yield line
+
+    def tokenized_documents(
+        self, lowercase=False
+    ) -> typing.Generator[StringGenerator, None, None]:
+        """
+        Get the tokenized documents of the corpus.
+
+        Parameters
+        ----------
+        lowercase : bool (Optional, default: `false`)
+            Whether or not to lowercase all tokens.
+
+        Returns
+        -------
+        Generator of Generator of str
+            The documents and their tokens.
+        """
+        for document in self.documents():
+            tokenizer = ForwardTokenizer(document)
+            tokenizer.lowercase = lowercase
+            yield (token for token in tokenizer)
 
     def sentences(self) -> StringGenerator:
         """
@@ -55,9 +86,16 @@ class CorpusReader:
                         orig_sentence += t.spacing + t.value
                     yield orig_sentence
 
-    def tokenized_sentences(self) -> typing.Generator[StringGenerator, None, None]:
+    def tokenized_sentences(
+        self, lowercase=False
+    ) -> typing.Generator[StringGenerator, None, None]:
         """
         Get the sentences of the corpus, with their tokens.
+
+        Parameters
+        ----------
+        lowercase : bool (Optional, default: `false`)
+            Whether or not to lowercase all tokens.
 
         Returns
         -------
@@ -66,4 +104,5 @@ class CorpusReader:
         """
         for sentence in self.sentences():
             tokenizer = ForwardTokenizer(sentence)
+            tokenizer.lowercase = lowercase
             yield (token for token in tokenizer)
