@@ -6,7 +6,7 @@ import poiolib
 
 class TestLangInfo(unittest.TestCase):
     def setUp(self):
-        self.langinfo = poiolib.LangInfo()
+        self.langinfo = poiolib.langinfo.LangInfo()
 
     def test_languages(self):
         languages = self.langinfo.languages()
