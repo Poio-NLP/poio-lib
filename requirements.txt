@@ -1,5 +1,5 @@
-beautifulsoup4
-requests
-pressagio
-regex
-syntok
+beautifulsoup4==4.8.1
+requests==2.22.0
+pressagio==0.1.6
+regex==2019.11.1
+syntok==1.2.2

@@ -46,6 +46,36 @@ def tokenize(text: str, lowercase=False) -> StringGenerator:
         yield token
 
 
+def tokenize_normalized_casing(
+    text: str, capitals_map: typing.Dict[str, str]
+) -> StringGenerator:
+    """
+    Get tokens of a text and map sentence start tokens.
+
+    We use this to normalize sentence starts, e.g. to map uppercase tokens at
+    sentence starts to their lowercase version.
+
+    Parameters
+    ----------
+    text : str
+        The text to tokenize.
+    capitals_map : Dict[str, str]
+        This is a dict to map tokens at sentence starts to their lowercase.
+        Check `capitalize.py` how to create such a map.
+
+    Returns
+    -------
+    Generator of str
+        The tokens of the text.
+ 
+    """
+    for sentence in sentences(text):
+        for i, token in enumerate(tokenize(sentence)):
+            if i == 0:
+                token = capitals_map.get(token, token)
+            yield token
+
+
 def sentences(text: str) -> StringGenerator:
     """
     Get the sentences of a document.

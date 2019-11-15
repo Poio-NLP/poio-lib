@@ -18,10 +18,10 @@ URL = "https://github.com/Poio-NLP/poio-lib"
 EMAIL = "pbouda@outlook.com"
 AUTHOR = "Peter Bouda"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 # What packages are required for this module to be executed?
-REQUIRED = ["requests", "beautifulsoup4"]
+REQUIRED = ["requests", "beautifulsoup4", "pressagio", "regex", "syntok"]
 
 # What packages are optional?
 EXTRAS = {

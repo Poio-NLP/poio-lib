@@ -34,7 +34,10 @@ def preprocess(text: str) -> str:
 
 
 def corpus_ngrams(
-    files: typing.List[str], ngram_size: int, lowercase: bool = False, cutoff: int = 0
+    files: typing.List[str],
+    ngram_size: int,
+    capitals_map: typing.Dict[str, str] = {},
+    cutoff: int = 0,
 ) -> pressagio.tokenizer.NgramMap:
     """
     Tokenize a file and return an ngram store.
@@ -45,22 +48,25 @@ def corpus_ngrams(
        A list of paths to files to parse.
     ngram_size : int
         The size of the ngrams to generate.
-    lowercase : bool
-        Whether or not to lowercase all tokens.
+    capitals_map : Dict[str, str]
+        This is a dict to map tokens at sentence starts to their lowercase.
+        Check `capitalize.py` how to create such a map.
     cutoff : int
         Perform a cutoff after parsing. We will only return ngrams that have a
         frequency higher than the cutoff.
 
     Returns
     -------
-    NgramMap
+    poiolib.tokenizer.NgramMap
         The ngram map that allows you to iterate over the ngrams.
     """
     ngram_map = pressagio.tokenizer.NgramMap()
     for document in poiolib.corpus.corpus_documents(files):
         document = preprocess(document)
         ngram_list = []
-        tokenized_document = poiolib.corpus.tokenize(document, lowercase)
+        tokenized_document = poiolib.corpus.tokenize_normalized_casing(
+            document, capitals_map
+        )
         if ngram_size > 1:
             for token in tokenized_document:
                 token_idx = ngram_map.add_token(token)
