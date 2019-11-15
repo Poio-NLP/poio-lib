@@ -1,5 +1,4 @@
 import re
-import collections
 import typing
 
 import pressagio.tokenizer

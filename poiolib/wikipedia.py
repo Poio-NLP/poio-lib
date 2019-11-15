@@ -23,9 +23,9 @@ def extract_to_txt(iso_639_3: str, output_filename: str):
     Parameters
     ----------
     iso_639_3 : str
-    	The ISO code of the Wikiepedia to download
+        The ISO code of the Wikiepedia to download
     output_filename : str
-    	The path to the text file to output the Wikipedia data. We will write
+        The path to the text file to output the Wikipedia data. We will write
         one article per line.
     """
     tmp_dir = os.path.join(tempfile.gettempdir(), "poio-corpus-data", iso_639_3)
@@ -55,9 +55,9 @@ def extract_to(iso_639_3: str, output_path: str):
     Parameters
     ----------
     iso_639_3 : str
-    	The ISO code of the Wikiepedia to download
+        The ISO code of the Wikiepedia to download
     output_path : str
-    	The path to store the extracted data. We use Wikiextractor the the output
+        The path to store the extracted data. We use Wikiextractor the the output
         will be organized in sub-directories, where each sub-directory contains a
         list of JSONL files.
     """
@@ -66,8 +66,6 @@ def extract_to(iso_639_3: str, output_path: str):
     if iso_639_1 == "":
         iso_639_1 = iso_639_3
     wiki_date, dump_link = get_dump_link(iso_639_1)
-    in_wiki_prefix = iso_639_1 + "wiki"
-    out_wiki_prefix = iso_639_3 + "wiki"
     file_path = download_dump(dump_link, output_path)
     wikipedia_extractor(file_path, output_path)
 
@@ -93,7 +91,7 @@ def _dump_link_from_lang_page(wiki_name: str, page: str) -> (str, str):
     soup = BeautifulSoup(html_page.content, features="html.parser")
     all_links = soup("a")
     for l in all_links:
-        match = re.match(wiki_name + "-(\d{8})-pages-articles.xml.bz2", l.string)
+        match = re.match(wiki_name + "-(\\d{8})-pages-articles.xml.bz2", l.string)
         if match:
             wiki_date = match.group(1)
             dump_link = urllib.parse.urljoin(page, l["href"])
@@ -161,7 +159,7 @@ def download_dump(dump_link: str, download_path: str) -> str:
 def wikipedia_extractor(file_path: str, output_path: str):
     """
     Extract Wikipedia data (articles) from a dump file.
-    
+
     We use WikiExtractor to extract the data:
     https://github.com/attardi/wikiextractor
 

@@ -1,5 +1,3 @@
-import os
-import glob
 import typing
 
 import syntok.segmenter as segmenter
@@ -67,7 +65,6 @@ def tokenize_normalized_casing(
     -------
     Generator of str
         The tokens of the text.
- 
     """
     for sentence in sentences(text):
         for i, token in enumerate(tokenize(sentence)):
@@ -84,7 +81,7 @@ def sentences(text: str) -> StringGenerator:
     ----------
     text : str
         The text to tokenize.
- 
+
     Returns
     -------
     Generator of str
