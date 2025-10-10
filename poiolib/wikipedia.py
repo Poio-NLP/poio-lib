@@ -1,17 +1,17 @@
-import os
-import sys
-import subprocess
-import urllib
-import re
 import glob
-import shutil
 import json
+import os
+import re
+import shutil
+import subprocess
+import sys
 import tempfile
+import urllib
 
 import requests
 from bs4 import BeautifulSoup
 
-from .langinfo import LangInfo
+from poiolib.langinfo import LangInfo
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
